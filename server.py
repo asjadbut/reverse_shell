@@ -28,10 +28,10 @@ bind_socket()
 
 #function for establishing a connection with client (socket must be listening )
 def accept_connection ():
-    global s
-    try:
-        print("Accepting the connection!")
-        connection,address  = s.accept()
-        print("Connection established! IP: {} Port: {}".format(str(address[0]),str(address[1])))
-    except:
-        print("Error: " + str(socket.error))
+    print("Accepting the connection!")
+    connection,address  = s.accept()
+    print("Connection established! IP: {} Port: {}".format(address[0],str(address[1])))
+
+def send_commands(connection):
+    print("Sending the data over the connection!")
+    connection.send()
