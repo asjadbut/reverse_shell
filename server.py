@@ -1,7 +1,7 @@
 import socket
 import sys
-from typing import BinaryIO
-host = "103.104.214.235"
+
+host = ""
 port = 9999
 
 #function for creating a socket 
@@ -42,8 +42,9 @@ def send_commands(connection):
             print("Sending the data over the connection!")
             connection.send(str.encode(cmd))
             print("Data received from the client: " + "\n")
-            client_response  = str(connection.recvfrom(1024),"utf-8")
-            print(client_response, end="")
+            client_response_byte  = connection.recv(1024)
+            client_response_str = client_response_byte.decode("utf-8")
+            print(client_response_str, end="")
 
 def main():
     create_socket()

