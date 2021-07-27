@@ -42,7 +42,7 @@ def send_commands(connection):
             print("Sending the command over the connection!")
             connection.send(str.encode(cmd))
             print("Data received from the client: " + "\n")
-            client_response_byte  = connection.recv(1024)
+            client_response_byte  = connection.recv(2048)
             client_response_str = client_response_byte.decode("utf-8")
             print(client_response_str, end=" ")
 
