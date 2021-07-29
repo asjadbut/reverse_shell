@@ -13,6 +13,7 @@ all_addresses = []
 
 host = ""
 port = 9999
+global s
 
 #function for creating a socket 
 def create_socket():
@@ -32,6 +33,8 @@ def bind_socket():
     except:
         print("Error: " + str(socket.error) + "\n" + "Tryng again to bind!")
         bind_socket()
+
+
 
 #handling connections from multiple clients and saving to a list  (socket must be listening )
 # closing previous connections when server.py file is restarted
