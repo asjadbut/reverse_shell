@@ -52,3 +52,14 @@ def accepting_connection():
             print("Error: " + str(socket.error))
 
 # 2nd thread functions 1-) see all clients 2-) select a client 3-) send command to the client 
+
+def start_turtle():
+    cmd = input("turtle> ")
+    if cmd == 'list':
+        list_connection()
+    elif 'select' in cmd:
+        conn = get_target()
+        if conn is not None:
+            send_target_commands(cmd)
+    else:
+        print("Command not found")
