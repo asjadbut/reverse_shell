@@ -2,7 +2,7 @@ import socket
 import  os
 import subprocess
 
-server = "192.168.0.105"
+server = "192.168.0.102"
 port = 9999
 
 def create_socket():
